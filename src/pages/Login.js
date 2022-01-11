@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { userData } from '../actions';
 
 class Login extends React.Component {
   constructor() {
@@ -18,7 +21,7 @@ class Login extends React.Component {
   enableBtn = () => {
     const { email, password } = this.state;
     const numberOfCharacters = 6;
-    const checkEmail = /\S+@\S+\.\S+/;
+    const checkEmail = /\S+@\S+\.\S+/; // metodo retirado do site https://www.horadecodar.com.br/2020/09/13/como-validar-email-com-javascript/
     const emailCondition = checkEmail.test(email);
     if (emailCondition === true && password.length >= numberOfCharacters) {
       this.setState({
@@ -31,9 +34,17 @@ class Login extends React.Component {
     }
   }
 
+  userSubmit = (ev) => {
+    ev.preventDefault();
+    const { dispatchSetValue, history } = this.props;
+    dispatchSetValue(this.state);
+    history.push('/carteira'); // feature do history.push realizada com ajuda de Joel Almeida
+  }
+
   render() {
     const { isBtnDisabled, email, password } = this.state;
-    const { handleChange } = this;
+    const { handleChange, userSubmit } = this;
+    // const { rEmail, rPassword } = this.props;
     return (
       <form>
         <h3>Login</h3>
@@ -62,6 +73,7 @@ class Login extends React.Component {
         <button
           type="submit"
           disabled={ isBtnDisabled }
+          onClick={ userSubmit }
         >
           Entrar
         </button>
@@ -70,4 +82,13 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch) => ({
+  dispatchSetValue: (userEmail) => dispatch(userData(userEmail)),
+});
+
+Login.propTypes = {
+  dispatchSetValue: PropTypes.func.isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+
+export default connect(null, mapDispatchToProps)(Login);
