@@ -17,7 +17,6 @@ const user = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       email: action.payload.email,
-      // password: action.payload.password,
     };
   default:
     return state;
