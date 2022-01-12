@@ -44,7 +44,7 @@ class Login extends React.Component {
   render() {
     const { isBtnDisabled, email, password } = this.state;
     const { handleChange, userSubmit } = this;
-    // const { rEmail, rPassword } = this.props;
+
     return (
       <form>
         <h3>Login</h3>
