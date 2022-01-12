@@ -42,3 +42,5 @@ Header.propTypes = {
 };
 
 export default connect(mapStateToProps)(Header);
+
+// comentário para correção da descrição do commit.
