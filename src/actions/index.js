@@ -7,10 +7,18 @@ export const userData = (payload) => (
   }
 );
 
-export const WALLET_DATA = 'WALLET_DATA';
+export const WALLET_DATA_CURRENCY = 'WALLET_DATA_CURRENCY';
 
-export const walletData = (payload) => (
+export const walletDataCurrency = (payload) => (
   {
-    type: WALLET_DATA, payload,
+    type: WALLET_DATA_CURRENCY, payload,
+  }
+);
+
+export const WALLET_DATA_EXPENSES = 'WALLET_DATA_ESPENSES';
+
+export const walletDataExpenses = (payload) => (
+  {
+    type: WALLET_DATA_EXPENSES, payload,
   }
 );
