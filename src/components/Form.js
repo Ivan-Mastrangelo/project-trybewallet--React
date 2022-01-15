@@ -1,51 +1,54 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { walletDataExpenses } from '../actions';
+import { requestApiThunk, walletDataExpenses } from '../actions';
+import getExchangeRate from '../services/requestAPI';
 
 class Form extends React.Component {
   constructor() {
     super();
     this.state = {
       id: 0,
-      spentValue: 0,
+      value: 0,
       description: '',
       currency: '',
-      payType: '',
-      spentIn: '',
+      method: '',
+      tag: '',
     };
   }
 
+  componentDidMount() {
+    const { sendExchangeData } = this.props;
+    sendExchangeData();
+    // console.log(sendExchangeData());
+  }
+
   handleChange = ({ target }) => {
-    const { name } = target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const { name, value } = target;
     this.setState({ [name]: value });
   }
 
-  expenseSubmit = (ev) => {
+  expenseSubmit = async (ev) => {
     ev.preventDefault();
+    const response = await getExchangeRate();
     const { id } = this.state;
     this.setState({ id: id + 1 });
-    const { submitForm } = this.props;
-    submitForm(this.state);
+    const { submitForm, sendExchangeData } = this.props;
+    submitForm({ ...this.state, exchangeRates: response });
+    sendExchangeData();
     this.setState({
-      spentValue: 0,
+      value: 0,
       description: '',
       currency: '',
-      payType: '',
-      spentIn: '',
+      method: '',
+      tag: '',
     });
   }
 
   render() {
-    const { spentValue, description, currency, payType, spentIn } = this.state;
-    // const {
-    //   spentValue: value,
-    //   description: desc,
-    //   currency: curr,
-    //   payType: type,
-    //   spentIn: spent,
-    // } = this.props;
+    const { value, description, currency, method, tag } = this.state;
+
+    // exchangeRates: mockData,
 
     return (
       <form>
@@ -54,11 +57,11 @@ class Form extends React.Component {
           Valor da despesa:
           <input
             type="number"
-            name="spentValue"
+            name="value"
             placeholder="0,00"
             id="newSpent"
             data-testid="value-input"
-            value={ spentValue }
+            value={ value }
             onChange={ this.handleChange }
           />
         </label>
@@ -87,10 +90,10 @@ class Form extends React.Component {
         <label htmlFor="paymentForm">
           Forma de pagamento:
           <select
-            name="payType"
+            name="method"
             id="paymentForm"
             data-testid="method-input"
-            value={ payType }
+            value={ method }
             onChange={ this.handleChange }
           >
             <option value="money">Dinheiro</option>
@@ -101,10 +104,10 @@ class Form extends React.Component {
         <label htmlFor="expenseType">
           Despesa em:
           <select
-            name="spentIn"
+            name="tag"
             id="expenseType"
             data-testid="tag-input"
-            value={ spentIn }
+            value={ tag }
             onChange={ this.handleChange }
           >
             <option value="Food">Alimentação</option>
@@ -127,21 +130,14 @@ class Form extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   submitForm: (data) => dispatch(walletDataExpenses(data)),
+  sendExchangeData: () => dispatch(requestApiThunk()),
 });
-
-// const mapStateToProps = (state) => ({
-//   id: state.wallet.id,
-//   spentValue: state.wallet.spent,
-//   description: state.wallet.description,
-//   currency: state.wallet.currency,
-//   payType: state.wallet.payType,
-//   spentIn: state.wallet.spentIn,
-// });
 
 export default connect(null, mapDispatchToProps)(Form);
 
 Form.propTypes = {
   submitForm: PropTypes.func.isRequired,
+  sendExchangeData: PropTypes.func.isRequired,
   // spentValue: PropTypes.number.isRequired,
   // value: PropTypes.number.isRequired,
   // description: PropTypes.string.isRequired,
@@ -153,3 +149,12 @@ Form.propTypes = {
   // spentIn: PropTypes.string.isRequired,
   // spent: PropTypes.string.isRequired,
 };
+
+// const mapStateToProps = (state) => ({
+//   id: state.wallet.id,
+//   spentValue: state.wallet.spent,
+//   description: state.wallet.description,
+//   currency: state.wallet.currency,
+//   payType: state.wallet.payType,
+//   spentIn: state.wallet.spentIn,
+// });

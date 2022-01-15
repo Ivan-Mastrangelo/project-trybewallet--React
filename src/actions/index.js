@@ -1,4 +1,7 @@
+import getExchangeRate from '../services/requestAPI';
+
 // Coloque aqui suas actions
+
 export const USER_DATA = 'USER_DATA';
 
 export const userData = (payload) => (
@@ -22,3 +25,18 @@ export const walletDataExpenses = (payload) => (
     type: WALLET_DATA_EXPENSES, payload,
   }
 );
+
+export const REQUEST_API = 'REQUEST_API';
+
+export const requestApi = (paylod) => (
+  {
+    type: REQUEST_API, paylod,
+  }
+);
+
+export function requestApiThunk() {
+  return (dispatch) => {
+    getExchangeRate()
+      .then((data) => dispatch(requestApi(data)));
+  };
+}

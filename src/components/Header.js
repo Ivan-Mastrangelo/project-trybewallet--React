@@ -7,13 +7,38 @@ class Header extends React.Component {
     super();
     this.state = {
       currencies: 'USD',
-      expenses: 0,
+      // totalExpenses: 0,
     };
+    this.expensesCalc = this.expensesCalc.bind(this);
+  }
+
+  // expensesCalc = () => {
+  //   const { expenses } = this.props;
+  //   const total = expenses
+  //     .reducer((acc, { value, currency, exchangeRates }) => {
+  //       const { ask } = exchangeRates[currency];
+  //       console.log(ask, currency, value);
+  //       const valueNum = Number(value);
+  //       const askNumber = Number(ask);
+  //       acc += valueNum * askNumber;
+  //       return acc;
+  //     }, 0);
+  //   return total;
+  // };
+
+  expensesCalc() {
+    const { expenses } = this.props;
+    const total = expenses.reduce((acc, item) => {
+      acc += Number(item.value); // * Number(item.exchangeRates[currency].ask);
+      return acc;
+    }, 0);
+    return total;
   }
 
   render() {
     const { email } = this.props;
-    const { currencies, expenses } = this.state;
+    const { currencies } = this.state;
+    // console.log(expenses);
     return (
       <>
         <div>
@@ -22,7 +47,7 @@ class Header extends React.Component {
         </div>
         <div>
           <h4>Total de gastos</h4>
-          <span data-testid="total-field">{expenses}</span>
+          <span data-testid="total-field">{this.expensesCalc()}</span>
           <h4 data-testid="header-currency-field">
             {currencies}
             :BRL
@@ -35,10 +60,12 @@ class Header extends React.Component {
 
 const mapStateToProps = (state) => ({
   email: state.user.email,
+  expenses: state.wallet.expenses,
 });
 
 Header.propTypes = {
   email: PropTypes.string.isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
 
 export default connect(mapStateToProps)(Header);
