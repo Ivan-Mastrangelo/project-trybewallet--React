@@ -24,7 +24,7 @@ const wallet = (state = INITIAL_STATE, action) => {
   case REQUEST_CURRENCY_ABBREVIATIONS:
     return {
       ...state,
-      currencies: Object.keys(action.payload), // Solução vista na mentoria summer em auxílio do mentor Paulo Sordi a outra aluna.
+      currencies: Object.keys(action.payload), // Solução vista na mentoria summer do mentor Paulo Sordi em auxílio à aluna Gabriele Castro(ela escreveu esta linha de código).
     };
   default:
     return state;
