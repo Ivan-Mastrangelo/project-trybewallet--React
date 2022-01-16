@@ -1,4 +1,8 @@
-import { WALLET_DATA_EXPENSES, REQUEST_API } from '../actions';
+import {
+  WALLET_DATA_EXPENSES,
+  REQUEST_API,
+  REQUEST_CURRENCY_ABBREVIATIONS,
+} from '../actions';
 
 const INITIAL_STATE = {
   currencies: [],
@@ -16,6 +20,11 @@ const wallet = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       exchangeRates: action.payload,
+    };
+  case REQUEST_CURRENCY_ABBREVIATIONS:
+    return {
+      ...state,
+      currencies: Object.keys(action.payload),
     };
   default:
     return state;

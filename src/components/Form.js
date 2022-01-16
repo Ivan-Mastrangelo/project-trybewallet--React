@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { requestApiThunk, walletDataExpenses } from '../actions';
+import { requestApiThunk, walletDataExpenses, requestCurrencyAbbThunk } from '../actions';
 import getExchangeRate from '../services/requestAPI';
 
 class Form extends React.Component {
   constructor() {
     super();
     this.state = {
-      id: 0,
+      id: -1,
       value: 0,
       description: '',
       currency: '',
@@ -18,9 +18,8 @@ class Form extends React.Component {
   }
 
   componentDidMount() {
-    const { sendExchangeData } = this.props;
-    sendExchangeData();
-    // console.log(sendExchangeData());
+    const { currencyAbbreviations } = this.props;
+    currencyAbbreviations();
   }
 
   handleChange = ({ target }) => {
@@ -47,7 +46,8 @@ class Form extends React.Component {
 
   render() {
     const { value, description, currency, method, tag } = this.state;
-
+    const { currencyAbbr } = this.props;
+    console.log(currencyAbbr);
     // exchangeRates: mockData,
 
     return (
@@ -78,14 +78,26 @@ class Form extends React.Component {
         </label>
         <label htmlFor="countryCurrency">
           Moeda:
-          <input
+          <select
             type="text"
             name="currency"
             id="countryCurrency"
             data-testid="currency-input"
             value={ currency }
             onChange={ this.handleChange }
-          />
+          >
+            {
+              currencyAbbr.map((element) => (
+                <option
+                  key={ element }
+                  value={ element }
+                  data-testid={ element }
+                >
+                  { element }
+                </option>
+              ))
+            }
+          </select>
         </label>
         <label htmlFor="paymentForm">
           Forma de pagamento:
@@ -131,13 +143,20 @@ class Form extends React.Component {
 const mapDispatchToProps = (dispatch) => ({
   submitForm: (data) => dispatch(walletDataExpenses(data)),
   sendExchangeData: () => dispatch(requestApiThunk()),
+  currencyAbbreviations: () => dispatch(requestCurrencyAbbThunk()),
 });
 
-export default connect(null, mapDispatchToProps)(Form);
+const mapStateToProps = (state) => ({
+  currencyAbbr: state.wallet.currencies,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form);
 
 Form.propTypes = {
   submitForm: PropTypes.func.isRequired,
   sendExchangeData: PropTypes.func.isRequired,
+  currencyAbbr: PropTypes.arrayOf(PropTypes.any).isRequired,
+  currencyAbbreviations: PropTypes.func.isRequired,
   // spentValue: PropTypes.number.isRequired,
   // value: PropTypes.number.isRequired,
   // description: PropTypes.string.isRequired,

@@ -28,6 +28,8 @@ class Header extends React.Component {
 
   expensesCalc() {
     const { expenses } = this.props;
+    // const { exchangeRates } = expenses;
+    // console.log(expenses);
     const total = expenses.reduce((acc, item) => {
       acc += Number(item.value); // * Number(item.exchangeRates[currency].ask);
       return acc;
@@ -61,6 +63,7 @@ class Header extends React.Component {
 const mapStateToProps = (state) => ({
   email: state.user.email,
   expenses: state.wallet.expenses,
+  currencyAbbr: state.wallet.currencies,
 });
 
 Header.propTypes = {
