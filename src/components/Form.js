@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { requestApiThunk, walletDataExpenses, requestCurrencyAbbThunk } from '../actions';
+import { walletDataExpenses, requestCurrencyAbbThunk } from '../actions';
 import getExchangeRate from '../services/requestAPI';
 
 class Form extends React.Component {
@@ -11,14 +11,17 @@ class Form extends React.Component {
       id: -1,
       value: 0,
       description: '',
-      currency: '',
-      method: '',
-      tag: '',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: '`Alimentação`',
     };
   }
 
   componentDidMount() {
     const { currencyAbbreviations } = this.props;
+    // const { expenses } = this.props;
+
+    // submitForm(this.state);
     currencyAbbreviations();
   }
 
@@ -32,23 +35,20 @@ class Form extends React.Component {
     const response = await getExchangeRate();
     const { id } = this.state;
     this.setState({ id: id + 1 });
-    const { submitForm, sendExchangeData } = this.props;
+    const { submitForm } = this.props;
     submitForm({ ...this.state, exchangeRates: response });
-    sendExchangeData();
     this.setState({
       value: 0,
       description: '',
-      currency: '',
-      method: '',
-      tag: '',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: 'Alimentação',
     });
   }
 
   render() {
     const { value, description, currency, method, tag } = this.state;
     const { currencyAbbr } = this.props;
-    console.log(currencyAbbr);
-    // exchangeRates: mockData,
 
     return (
       <form>
@@ -68,7 +68,7 @@ class Form extends React.Component {
         <label htmlFor="spentDescription">
           Descrição:
           <input
-            type="textarea"
+            type="text"
             name="description"
             id="spentDescription"
             data-testid="description-input"
@@ -85,6 +85,7 @@ class Form extends React.Component {
             data-testid="currency-input"
             value={ currency }
             onChange={ this.handleChange }
+            sele
           >
             {
               currencyAbbr.map((element) => (
@@ -108,9 +109,9 @@ class Form extends React.Component {
             value={ method }
             onChange={ this.handleChange }
           >
-            <option value="money">Dinheiro</option>
-            <option value="credit card">Cartão de crédito</option>
-            <option value="debit card">Cartão de débito</option>
+            <option>Dinheiro</option>
+            <option>Cartão de crédito</option>
+            <option>Cartão de débito</option>
           </select>
         </label>
         <label htmlFor="expenseType">
@@ -122,11 +123,11 @@ class Form extends React.Component {
             value={ tag }
             onChange={ this.handleChange }
           >
-            <option value="Food">Alimentação</option>
-            <option value="Leisure">Lazer</option>
-            <option value="Work">Trabalho</option>
-            <option value="Transport">Transporte</option>
-            <option value="Health">Saúde</option>
+            <option value="Alimentação">Alimentação</option>
+            <option value="Lazer">Lazer</option>
+            <option value="Trabalho">Trabalho</option>
+            <option value="Transporte">Transporte</option>
+            <option value="Saúde">Saúde</option>
           </select>
         </label>
         <button
@@ -142,38 +143,20 @@ class Form extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   submitForm: (data) => dispatch(walletDataExpenses(data)),
-  sendExchangeData: () => dispatch(requestApiThunk()),
+  // sendExchangeData: () => dispatch(requestApiThunk()),
   currencyAbbreviations: () => dispatch(requestCurrencyAbbThunk()),
 });
 
 const mapStateToProps = (state) => ({
   currencyAbbr: state.wallet.currencies,
+  expenses: state.wallet.expenses,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form);
 
 Form.propTypes = {
   submitForm: PropTypes.func.isRequired,
-  sendExchangeData: PropTypes.func.isRequired,
   currencyAbbr: PropTypes.arrayOf(PropTypes.any).isRequired,
   currencyAbbreviations: PropTypes.func.isRequired,
-  // spentValue: PropTypes.number.isRequired,
-  // value: PropTypes.number.isRequired,
-  // description: PropTypes.string.isRequired,
-  // desc: PropTypes.string.isRequired,
-  // currency: PropTypes.string.isRequired,
-  // curr: PropTypes.string.isRequired,
-  // payType: PropTypes.string.isRequired,
-  // type: PropTypes.string.isRequired,
-  // spentIn: PropTypes.string.isRequired,
-  // spent: PropTypes.string.isRequired,
+  // expenses: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
-
-// const mapStateToProps = (state) => ({
-//   id: state.wallet.id,
-//   spentValue: state.wallet.spent,
-//   description: state.wallet.description,
-//   currency: state.wallet.currency,
-//   payType: state.wallet.payType,
-//   spentIn: state.wallet.spentIn,
-// });

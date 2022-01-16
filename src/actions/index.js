@@ -29,12 +29,6 @@ export const requestApi = (paylod) => (
     type: REQUEST_API, paylod,
   }
 );
-export function requestApiThunk() {
-  return (dispatch) => {
-    getExchangeRate()
-      .then((data) => dispatch(requestApi(data)));
-  };
-}
 
 export const REQUEST_CURRENCY_ABBREVIATIONS = 'REQUEST_CURRENCY_ABBREVIATIONS';
 export const requesCurrencyAbbreviations = (payload) => (
@@ -48,7 +42,6 @@ export function requestCurrencyAbbThunk() {
       .then((data) => {
         delete data.USDT; // solução encontrada em https://igluonline.com/como-remover-uma-propriedade-de-um-objeto-javascript/
         dispatch(requesCurrencyAbbreviations(data));
-        console.log(data);
       });
   };
 }
