@@ -69,3 +69,5 @@ export default connect(mapStateToProps)(Table);
 Table.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
+
+// Tabela desenvolvido com auxílio do aluno Eduardo Miyazaki.
