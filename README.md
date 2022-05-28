@@ -33,12 +33,11 @@ Ao utilizar essa aplicação um usuário deverá ser capaz de:
 
 Basta clonar o projeto:
 ```
-git@github.com:Ivan-Mastrangelo/project-trybewallet--React
-.git
+git@github.com:Ivan-Mastrangelo/project-trybewallet--React.git
 ```
 Entrar no diretório criado:
 ```
-  cd react-solar-system
+  cd project-trybewallet--React
   ```
 Instalar as dependências do projeto:
 ```
