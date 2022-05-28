@@ -28,6 +28,30 @@ Ao utilizar essa aplicação um usuário deverá ser capaz de:
   ## Observação
 
   Assim como as pastas public e service, com seus respectivos arquivos, os arquivivos .gitignore, .env, .eslintignore, .eslintrc.json, .stylelintignore, .stylelintrc.json foram fornecidos prontos pela escola. O arquivo index.js veio semi pronto, coube a inserir o BrowserRouter e o Provider, com as configurações necessárias ao bom funcionamento do app.
+  
+  ### Para executá-lo localmente
+
+Basta clonar o projeto:
+```
+git@github.com:Ivan-Mastrangelo/project-trybewallet--React
+.git
+```
+Entrar no diretório criado:
+```
+  cd react-solar-system
+  ```
+Instalar as dependências do projeto:
+```
+  npm install
+  ```
+E iniciar o servidor:
+```
+  npm run start
+  ```
+Após esses comandos, acesse no navegador:
+```
+  http://localhost:3000/
+  ```
 
 ---
 
